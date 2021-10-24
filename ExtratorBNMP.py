@@ -411,3 +411,6 @@ class ExtratorBNMP:
         mandado = ["Prisão", situacao, n_mandado_prisao, data_exp, data_val, n_processo, esp_prisao, nome_magistrado, orgao_exp, municipio, tipificacoes, outros_nomes, nacionalidade, naturalidade, dt_nasc, sexo, recaptura, pena_imposta, regime_cump]
         print(mandado)
         return mandado
+
+    def fechar_driver(self):
+        self.driver.quit()
