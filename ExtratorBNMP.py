@@ -38,15 +38,15 @@ class ExtratorBNMP:
         Args
             uf: UF a ser extraída. Exemplo "Acre"
         """
-        dropdown = self.driver.find_element_by_xpath("""//*[@id="ui-fieldset-1-content"]/div/form/div[6]/div/p-dropdown/div/div[2]""")
-        # dropdown.click()
-        self.driver.execute_script("arguments[0].click();", dropdown)
+        dropdown = self.driver.find_element_by_xpath("//p-dropdown[@name='idEstado']")
+        dropdown.click()
 
         # Obtém o input
-        cmp_input = self.driver.find_element_by_xpath("""//*[@id="ui-fieldset-1-content"]/div/form/div[6]/div/p-dropdown/div/div[3]/div[1]/input""")
+        cmp_input = dropdown.find_elements_by_xpath(""".//input""")[-1]  # Encontra todos os inputs dentro de
+                                                                          # dropdown e seleciona o desejado.
         
         # Primeiro deleta o texto que estiver no campo
-        cmp_input.send_keys(Keys.CONTROL + 'a', Keys.BACKSPACE)
+        cmp_input.clear()
         
         sleep(self.INTERVALO)
         
@@ -56,24 +56,21 @@ class ExtratorBNMP:
         sleep(self.INTERVALO)
 
         # Seleciona o estado resultante
-        cmp_li = self.driver.find_element_by_xpath("""//*[@id="ui-fieldset-1-content"]/div/form/div[6]/div/p-dropdown/div/div[3]/div[2]/ul/li""")
+        cmp_li = dropdown.find_element_by_xpath("//*[@class='ui-dropdown-items-wrapper']/ul/li")
 
         # Clica no pesquisar do estado para preencher com o nome
-        # cmp_li.click()
-        self.driver.execute_script("arguments[0].click();", cmp_li)
+        cmp_li.click()
         
         sleep(self.INTERVALO)
 
-        botão_pesq = self.driver.find_element_by_xpath("""//*[@id="ui-fieldset-1-content"]/div/form/div[14]/button[2]""")
-        # botão_pesq.click()
-        self.driver.execute_script("arguments[0].click();", botão_pesq)
+        botão_pesq = self.driver.find_element_by_xpath("//button[@label='Pesquisar']")
+        botão_pesq.click()
         
         sleep(self.INTERVALO)
                 
-        btn_1a_pag = self.driver.find_element_by_xpath("""/html/body/app-root/div/div/div[2]/div/app-pesquisa-peca/div[1]/p-datatable/div/p-paginator/div/a[1]""")
+        btn_1a_pag = self.driver.find_element_by_class_name("ui-paginator-first")
         if (self.__btn_esta_habilitado(btn_1a_pag)):
-            # btn_1a_pag.click()
-            self.driver.execute_script("arguments[0].click();", btn_1a_pag)
+            btn_1a_pag.click()
             sleep(self.INTERVALO)
             
     def extrair_tudo(self):
@@ -392,7 +389,7 @@ class ExtratorBNMP:
         # Recaptura
         try:
             recaptura_cmp = self.driver.find_element_by_xpath("""//*[@id="ui-panel-73-content"]/div[1]/p[18]/span""")
-            recaptura = recaptura.text.replace("\n",";;")
+            recaptura = recaptura_cmp.text.replace("\n",";;")
         except:
             recaptura = ""
         # pena imposta
